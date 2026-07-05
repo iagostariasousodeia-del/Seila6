@@ -1,54 +1,57 @@
 -- ================================================
--- MATRIX v3.8 - REDZ HUB STYLE (CIANO)
+-- MATRIX v3.8 - MENU PRINCIPAL (SEILA6)
 -- ================================================
 
-local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/iagostariasousodeia-del/Seila7/refs/heads/main/README.md"))()
+local Library = {} -- Biblioteca integrada para não dar erro de link
 
--- Customização de Cores (Ciano / Redz Hub Style)
-local Win = Library:MakeWindow({
-    Title = "MATRIX HUB",
-    SubTitle = "Redz Edition",
-    Size = {Width = 400, Height = 350}
-})
+-- [INÍCIO DA BIBLIOTECA]
+local Themes = {
+    Cyan = {
+        Background = Color3.fromRGB(5, 5, 5),
+        Accent = Color3.fromRGB(0, 255, 255),
+        Element = Color3.fromRGB(15, 15, 15),
+        Text = Color3.fromRGB(255, 255, 255),
+        SubText = Color3.fromRGB(0, 200, 200)
+    }
+}
 
--- Criando a Aba Principal
-local Tab = Win:MakeTab({Name = "Auto Farm"})
+local function Corner(p, r) Instance.new("UICorner", p).CornerRadius = UDim.new(0, r or 6) end
+local function Stroke(p, c) 
+    local s = Instance.new("UIStroke", p)
+    s.Color = c; s.ApplyStrokeMode = Enum.ApplyStrokeMode.Border; s.Thickness = 1.2 
+end
 
--- Criando o Submenu (Seção) chamado Auxiliar Nível
-Tab:MakeSection("Auxiliar Nível")
-
--- Criando o Botão Ciano com o seu Loadstring
-Tab:MakeButton({
-    Name = "Auto Farme",
-    Callback = function()
-        -- Executa o seu script do GitHub
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/iagostariasousodeia-del/Seila7/refs/heads/main/README.md"))()
-        
-        -- Notificação estilo Redz
-        Win:Notify({
-            Content = "Auto Farm Ativado!",
-            Duration = 3
-        })
+function Library:MakeWindow(title)
+    local sg = Instance.new("ScreenGui", game:GetService("CoreGui"))
+    local main = Instance.new("Frame", sg); main.Size = UDim2.new(0, 350, 0, 300); main.Position = UDim2.new(0.5, -175, 0.5, -150); main.BackgroundColor3 = Themes.Cyan.Background; Corner(main, 10); Stroke(main, Themes.Cyan.Accent)
+    local top = Instance.new("TextLabel", main); top.Size = UDim2.new(1, 0, 0, 35); top.Text = "  "..title; top.TextColor3 = Themes.Cyan.Accent; top.Font = Enum.Font.GothamBold; top.TextXAlignment = Enum.TextXAlignment.Left; top.BackgroundTransparency = 1
+    local content = Instance.new("ScrollingFrame", main); content.Size = UDim2.new(1, -20, 1, -50); content.Position = UDim2.new(0, 10, 0, 45); content.BackgroundTransparency = 1; content.ScrollBarThickness = 0
+    Instance.new("UIListLayout", content).Padding = UDim.new(0, 8)
+    
+    local obj = {}
+    function obj:MakeSection(t)
+        local l = Instance.new("TextLabel", content); l.Size = UDim2.new(1, 0, 0, 20); l.Text = "  "..t:upper(); l.TextColor3 = Themes.Cyan.SubText; l.Font = Enum.Font.GothamBold; l.TextSize = 11; l.TextXAlignment = Enum.TextXAlignment.Left; l.BackgroundTransparency = 1
     end
-})
-
--- Adicionando um enfeite para parecer mais com o Redz Hub
-Tab:MakeSection("Configurações")
-
-Tab:MakeToggle({
-    Name = "Anti-Lag (FPS Boost)",
-    Default = false,
-    Callback = function(v)
-        if v then
-            print("Limpando texturas...")
-        end
+    function obj:MakeButton(n, cb)
+        local b = Instance.new("TextButton", content); b.Size = UDim2.new(1, 0, 0, 35); b.BackgroundColor3 = Themes.Cyan.Element; b.Text = n; b.TextColor3 = Themes.Cyan.Accent; b.Font = Enum.Font.GothamBold; Corner(b, 8); Stroke(b, Themes.Cyan.Accent)
+        b.MouseButton1Click:Connect(cb)
     end
-})
+    return obj
+end
+-- [FIM DA BIBLIOTECA]
 
--- Notificação de Inicialização
-Win:Notify({
-    Content = "MATRIX v3.8 Carregado | Ciano Theme",
-    Duration = 5
-})
-        
-        
+-- CRIANDO O SEU MENU
+local Win = Library:MakeWindow("MATRIX HUB v3.8")
+
+Win:MakeSection("Auxiliar Nível")
+
+Win:MakeButton("Auto Farme", function()
+    -- Este botão chama o seu script de farm que está no SEILA7
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/iagostariasousodeia-del/Seila7/refs/heads/main/README.md"))()
+    print("Auto Farm Chamado do Seila7!")
+end)
+
+Win:MakeSection("Configurações")
+Win:MakeButton("FPS Boost", function()
+    print("FPS Melhorado")
+end)
